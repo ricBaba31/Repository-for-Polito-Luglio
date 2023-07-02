@@ -82,7 +82,7 @@ TEST(TestImport, TestCell0D)
 
     Vector2d coord3T = {0.0000000000000000e+00, 0.655};
 
-    if(ImportCell0Ds(vectpT, numbercell0DT)){
+    if(ImportCell0Ds(vectpT, numbercell0DT, "../Dataset/Test1/Cell0Ds.csv")){
         EXPECT_EQ(vectpT[0].marker0D, 1);
         EXPECT_EQ(vectpT[2].Id0D, 2);
         EXPECT_EQ(vectpT[3].Coord, coord3T);
@@ -95,11 +95,11 @@ TEST(TestImport, TestCell1D)
 {
 
     unsigned int numbercell1DT = 0;
-    vector<double> LengthEdgesT; // = {0.0, 0.0};
+    //vector<double> LengthEdgesT; // = {0.0, 0.0};
     vector<Project::Cell1D> vectsT;
     vector<Project::Cell0D> vectpT;
 
-    if(ImportCell1Ds(vectsT, numbercell1DT, LengthEdgesT, vectpT)){
+    if(ImportCell1Ds(vectsT, numbercell1DT, vectpT, "../Dataset/Test1/Cell1Ds.csv")){
         EXPECT_EQ(vectsT[0].marker1D, 0);
         EXPECT_EQ(vectsT[2].Id1D, 2);
         EXPECT_EQ(vectsT[3].Vertices1D[0], 23);
@@ -117,7 +117,7 @@ TEST(TestImport, TestCell2D)
     unsigned int numbercell2DT = 0;
     vector<Project::Cell2D> vecttT;
 
-    if(ImportCell2Ds(vecttT, numbercell2DT, vectpT, vectpT2D)){
+    if(ImportCell2Ds(vecttT, numbercell2DT, vectpT, vectpT2D, "../Dataset/Test1/Cell2Ds.csv")){
         EXPECT_EQ(vecttT[0].Id2D, 41);
         EXPECT_EQ(vecttT[1].Vertices2D[0], 23);
         EXPECT_EQ(vecttT[2].Vertices2D[1], 51);
@@ -134,25 +134,25 @@ TEST(TestImport, TestCell2D)
 
 TEST(TestMetodi, TestLengthEdge)
 {
-    unsigned int idVerT1 = 0, idVerT3 = 2;
-    unsigned int idEdgT3 = 2;
-    unsigned int markerVerT1 = 1, markerVerT3 = 1;
-    unsigned int markerEdgT3 = 1;
+    unsigned int idVerT1 = 0, idVerT2 = 1;
+    unsigned int idEdgT = 2;
+    unsigned int markerVerT1 = 0, markerVerT2 = 0;
+    unsigned int markerEdgT = 0;
 
-    Vector2d CoordT1 = {0, 0};
-    Vector2d CoordT3 = {4, 3};
+    Vector2d CoordT1 = {0.0, 0.0};
+    Vector2d CoordT2 = {4.0, 3.0};
 
-    Cell0D vertT1 = Cell0D(idVerT1, markerVerT1, CoordT1), vertT3 = Cell0D(idVerT3, markerVerT3, CoordT3);
-    vector<Project::Cell0D> vectpT = {vertT1, vertT3};
+    Cell0D vertT1 = Cell0D(idVerT1, markerVerT1, CoordT1), vertT2 = Cell0D(idVerT2, markerVerT2, CoordT2);
+    vector<Project::Cell0D> vectpT = {vertT1, vertT2};
 
-    vector<unsigned int> verEdg3 = {vertT3.Id0D, vertT1.Id0D};
-    Cell1D edgT3 = Cell1D(idEdgT3, markerEdgT3, verEdg3);
-
-
+    vector<unsigned int> verEdg = {vertT2.Id0D, vertT1.Id0D};
+    Cell1D edgT = Cell1D(idEdgT, markerEdgT, verEdg);
 
 
 
-    double len = edgT3.LengthEdge(vectpT);
+
+
+    double len = edgT.LengthEdge(vectpT);
 
     EXPECT_EQ(len, 5);
 
@@ -164,8 +164,8 @@ TEST(TestMetodi, TestMaxEdge)
     unsigned int idVerT1 = 0, idVerT2 = 1, idVerT3 = 2;
     unsigned int idEdgT1 = 0, idEdgT2 = 1, idEdgT3 = 2;
     unsigned int idtri = 0;
-    unsigned int markerVerT1 = 1, markerVerT2 = 1, markerVerT3 = 1;
-    unsigned int markerEdgT1 = 1, markerEdgT2 = 1, markerEdgT3 = 1;
+    unsigned int markerVerT1 = 0, markerVerT2 = 0, markerVerT3 = 0;
+    unsigned int markerEdgT1 = 0, markerEdgT2 = 0, markerEdgT3 = 0;
     Vector2d CoordT1 = {0, 0};
     Vector2d CoordT2 = {4, 0};
     Vector2d CoordT3 = {4, 3};
