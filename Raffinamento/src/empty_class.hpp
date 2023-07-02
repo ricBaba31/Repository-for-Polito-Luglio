@@ -68,14 +68,14 @@ namespace Project {
 
         unsigned int numbercell1D;
         vector<Project::Cell1D> vects1;
-        vector<double> LengthEdges;
+        //vector<double> LengthEdges;
 
 
         unsigned int numbercell2D;
         std::vector<vector<unsigned int>> LenghtMax;
         vector<Project::Cell2D> vectt1;
 
-        TriangularMesh(unsigned int& numbercell0D1, vector<Project::Cell0D>& vectp1, unsigned int& numbercell1D1, vector<Project::Cell1D>& vects1, vector<double>& LengthEdges1, unsigned int& numbercell2D1, std::vector<vector<unsigned int>>& LenghtMax1, vector<Project::Cell2D>& vectt1);
+        TriangularMesh(unsigned int& numbercell0D1, vector<Project::Cell0D>& vectp1, unsigned int& numbercell1D1, vector<Project::Cell1D>& vects1, unsigned int& numbercell2D1, std::vector<vector<unsigned int>>& LenghtMax1, vector<Project::Cell2D>& vectt1);
 
     };
 
@@ -91,9 +91,9 @@ namespace Project {
 
 
 
-    bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti, unsigned int& numbercell0D123);
-    bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, unsigned int& numbercell1D123, vector<double>& LengthEdges123, vector<Project::Cell0D>& vettorePunti);
-    bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli, unsigned int& numbercell2D123, vector<Project::Cell0D>& vettorePunti, vector<Project::Cell0D>& vectp2DF);
+    bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti, unsigned int& numbercell0D123, const string& path);
+    bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, unsigned int& numbercell1D123, vector<Project::Cell0D>& vettorePunti, const string& path);
+    bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli, unsigned int& numbercell2D123, vector<Project::Cell0D>& vettorePunti, vector<Project::Cell0D>& vectp2DF, const string& path);
 
     vector<vector<unsigned int>> MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects);
 
