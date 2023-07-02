@@ -58,14 +58,13 @@ Project::Cell2D::Cell2D(unsigned int& id,array<unsigned int, 3>& Vertices, array
 
 
 
-Project::TriangularMesh::TriangularMesh(unsigned int& numbercell0D12, vector<Project::Cell0D>& vectp12, unsigned int& numbercell1D12, vector<Project::Cell1D>& vects12, vector<double>& LengthEdges12, unsigned int& numbercell2D12, std::vector<vector<unsigned int>>& LenghtMax12, vector<Project::Cell2D>& vectt12){
+Project::TriangularMesh::TriangularMesh(unsigned int& numbercell0D12, vector<Project::Cell0D>& vectp12, unsigned int& numbercell1D12, vector<Project::Cell1D>& vects12, unsigned int& numbercell2D12, std::vector<vector<unsigned int>>& LenghtMax12, vector<Project::Cell2D>& vectt12){
 
     numbercell0D = numbercell0D12;
     vectp1 = vectp12;
 
     numbercell1D = numbercell1D12;
     vects1 = vects12;
-    LengthEdges = LengthEdges12;
 
     numbercell2D = numbercell2D12;
     LenghtMax = LenghtMax12;
@@ -89,25 +88,34 @@ Project::TriangularMesh::TriangularMesh(unsigned int& numbercell0D12, vector<Pro
 
 
 double Project::Cell1D::LengthEdge(vector<Project::Cell0D>& vectp){
-    Vector2d coordOrigin = vectp[this->Vertices1D[0]].Coord;
-    Vector2d coordEnd= vectp[this->Vertices1D[1]].Coord;
-    //double len = (coordEnd-coordOrigin).norm();
-    double len = sqrt(pow(coordOrigin.x() - coordEnd.x(), 2)+pow(coordOrigin.y() - coordEnd.y(), 2));
-    cout << len << endl;
+    unsigned int A = Vertices1D[0];
+    unsigned int B = Vertices1D[1];
+    Vector2d coordOrigin = vectp[A].Coord;
+    //double coordOriginx = vectp[A].Coord[0];
+    //cout << coordOrigin[0] << endl;
+    //double coordOriginy = vectp[A].Coord[1];
+    Vector2d coordEnd = vectp[B].Coord;
+    //double coordEndx = vectp[B].Coord[0];
+    //double coordEndy = vectp[B].Coord[1];
+
+    double len = (coordEnd-coordOrigin).norm();
+    //double len = sqrt(pow(coordOriginx - coordEndx, 2)+pow(coordOriginy - coordEndy, 2));
+    //cout << len << endl;
     return len;
     }
 
 //PROBLEMA TOLLERANZA
 unsigned int Project::Cell2D::maxedge(vector<Project::Cell1D>& vects, vector<Project::Cell0D>& vectp){
     unsigned int indmax = 0;
-    double max = vects[this->Edges[0]].LengthEdge(vectp);
-    for (unsigned int i = 0; i<3; i++){
-        if(vects[this->Edges[i]].LengthEdge(vectp)  > max - tol1D){  // check
-            max = vects[this->Edges[i]].LengthEdge(vectp);
+    double max = vects[Edges[0]].LengthEdge(vectp);
+    cout << max << endl;
+    for (unsigned int i = 1; i<3; i++){
+        if(vects[Edges[i]].LengthEdge(vectp)  > max - tol1D){  // check
+            max = vects[Edges[i]].LengthEdge(vectp);
             indmax = i;
         }
     }
-    return this->Edges[indmax];
+    return Edges[indmax];
 
 }
 
@@ -142,11 +150,11 @@ double Project::Cell2D::Area(){
 
 
 
-bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti, unsigned int& numbercell0D123)
+bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti, unsigned int& numbercell0D123, const string& file0)
 {
 
 ifstream file;
-file.open("./Cell0Ds.csv");
+file.open(file0);
 
 if(file.fail()){
 return false;
@@ -184,6 +192,7 @@ converter >>  id >> marker >> coord[0] >> coord[1];
 
 Project::Cell0D point = Project::Cell0D(id,marker,coord);
 vettorePunti.push_back(point);
+cout << point.Coord << endl;
 
 //    if( marker != 0)
 //    {
@@ -200,11 +209,11 @@ vettorePunti.push_back(point);
 
 
 
-bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, unsigned int& numbercell1D123, vector<double>& LengthEdges123, vector<Project::Cell0D>& vettorePunti)
+bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, unsigned int& numbercell1D123, vector<Project::Cell0D>& vettorePunti, const string& file1)
 {
 
   ifstream file;
-  file.open("./Cell1Ds.csv");
+  file.open(file1);
 
   if(file.fail())
     return false;
@@ -232,12 +241,13 @@ bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, unsigned int& numbercel
 
     unsigned int id;
     unsigned int marker;
-    vector<unsigned int> vertices;
+    vector<unsigned int> vertices(2);
 
     converter >>  id >> marker >> vertices[0] >> vertices[1];
     Project::Cell1D segment = Project::Cell1D(id,marker,vertices);
     vettoreLati.push_back(segment);
-    LengthEdges123.push_back(segment.LengthEdge(vettorePunti));
+    cout << segment.LengthEdge(vettorePunti) << endl;
+    //LengthEdges123.push_back(segment.LengthEdge(vettorePunti));
 
 
   }
@@ -249,11 +259,11 @@ bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, unsigned int& numbercel
 
 
 
-bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli, unsigned int& numbercell2D123, vector<Project::Cell0D>& vettorePunti, vector<Project::Cell0D>& vectp2DF)
+bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli, unsigned int& numbercell2D123, vector<Project::Cell0D>& vettorePunti, vector<Project::Cell0D>& vectp2DF, const string& file2)
 {
 
   ifstream file;
-  file.open("./Cell2Ds.csv");
+  file.open(file2);
 
   if(file.fail())
     return false;
