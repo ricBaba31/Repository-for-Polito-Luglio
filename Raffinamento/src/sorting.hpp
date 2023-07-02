@@ -8,7 +8,6 @@
 #include <vector>
 #include <algorithm>
 #include "cmath"
-#include "empty_class.hpp"
 
 
 using namespace std;
@@ -18,28 +17,28 @@ namespace Sorting
 {
 
 template <typename T>
-void MakeHeap(vector<T>& vecttSuppS, int i) { //, vector<T>& vectpS){
+void MakeHeap(vector<T>& vecttSuppS, unsigned int n, unsigned int i) { //, vector<T>& vectpS){
 
 
 
-    int max = i;
+    unsigned int max = i;
     unsigned int l = 2 * i + 1;
     unsigned int r = 2 * i + 2;
 
-    if (l < vecttSuppS.size() && vecttSuppS[l] < vecttSuppS[max])
+    if (l < n && vecttSuppS[l] < vecttSuppS[max])
         {
             max = l;
         }
 
-        if (r < vecttSuppS.size() && vecttSuppS[r] < vecttSuppS[max])
+        if (r < n && vecttSuppS[r] < vecttSuppS[max])
         {
             max = r;
         }
 
         if (max != i)
         {
-            swap(vecttSuppS[i], vecttSuppS[l]);
-            MakeHeap(vecttSuppS, i); //, vectpS);
+            swap(vecttSuppS[i], vecttSuppS[max]);
+            MakeHeap(vecttSuppS, n, max); //, vectpS);
         }
     }
 
@@ -54,12 +53,12 @@ void HeapSort(vector<T>& vecttSuppS, vector<T>& vecttS){  //, vector<T>& vectpS)
 
     for (int i = vecttSuppS.size() / 2 - 1; i >= 0; i--)
     {
-        MakeHeap(vecttSuppS, i); //, vectpS);
+        MakeHeap(vecttSuppS, vecttSuppS.size(), i); //, vectpS);
     }
     for (int i = vecttSuppS.size() - 1; i >= 0; i--)
     {
         swap(vecttSuppS[0], vecttSuppS[i]);
-        MakeHeap(vecttSuppS, 0); //, vectpS);
+        MakeHeap(vecttSuppS, i, 0); //, vectpS);
     }
 }
 
