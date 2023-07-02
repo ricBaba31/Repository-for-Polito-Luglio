@@ -207,7 +207,7 @@ TEST(TestMetodi, TestArea)
     vector<Project::Cell1D> vectsT = {edgT1, edgT2, edgT3};
 
     array<unsigned int, 3> verTri = {vertT1.Id0D, vertT2.Id0D, vertT3.Id0D};
-    array<unsigned int, 3> edgTri = {edgT1.Id1D, edgT2.Id1D, edgT2.Id1D};
+    array<unsigned int, 3> edgTri = {edgT1.Id1D, edgT2.Id1D, edgT3.Id1D};
     Cell2D triT = Cell2D(idtri, verTri, edgTri, vectpT);
 
     double len = triT.Area();
