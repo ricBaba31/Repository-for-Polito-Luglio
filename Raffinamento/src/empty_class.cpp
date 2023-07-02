@@ -347,8 +347,8 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
 
 
     unsigned int longest = triangleToBisect.maxedge(vects, vectp);
-    vector<Project::Cell0D> vectp2D;
-    vector<Project::Cell0D> vectp2D1;
+    vector<Project::Cell0D> vectp2Dnew;
+    vector<Project::Cell0D> vectp2Dupd;
     //serve subito controllo: 1) marker lato lungo 2) lato lungo dell'eventuale altro triangolo
     unsigned int markerMaxEdge = vects[longest].marker1D;
     unsigned int idAltroMaxEdge = 0;
@@ -382,8 +382,8 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
     unsigned int newIndexpoint = vectp.size();
     Project::Cell0D newVertex = Cell0D(newIndexpoint, markerP, midCoord);
     vectp.push_back(newVertex);
-    vectp2D.push_back(newVertex);
-    vectp2D1.push_back(newVertex);
+    //vectp2D.push_back(newVertex);
+    //vectp2D1.push_back(newVertex);
 
     unsigned int opposite = 0;
     for(unsigned int i = 0; i < 3; i++)
@@ -391,8 +391,8 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
         if(!(vects[longest].Vertices1D[0] == triangleToBisect.Vertices2D[i] || vects[longest].Vertices1D[1] == triangleToBisect.Vertices2D[i]))
             {
             opposite = triangleToBisect.Vertices2D[i];
-            vectp2D.push_back(vectp[opposite]);
-            vectp2D1.push_back(vectp[opposite]);
+            //vectp2D.push_back(vectp[opposite]);
+            //vectp2D1.push_back(vectp[opposite]);
             break;
             }
     }
@@ -406,7 +406,7 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
 
 
 
-     //Creo segm mediana
+    //Creo segm mediana
     Cell1D Mediana = Cell1D(idNewEdge, markerMediana, MedianaVert);
     vects.push_back(Mediana);
 
@@ -428,7 +428,7 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
     for (unsigned int i = 0;i<3;i++) {
         if (vertTriNuovo[i] != opposite && vertTriNuovo[i] != vects[longest].Vertices1D[1]) {
             vertTriNuovo[i] = newVertex.Id0D;
-            vectp2D.push_back(vectp[vertTriNuovo[i]]);
+            //vectp2D.push_back(vectp[vertTriNuovo[i]]);
             break;
         };
     }
@@ -437,12 +437,15 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
     for (unsigned int i = 0;i<3;i++) {
         if (triangleToBisect.Vertices2D[i] != opposite && triangleToBisect.Vertices2D[i] != vects[longest].Vertices1D[0]) {
             triangleToBisect.Vertices2D[i] = newVertex.Id0D;
-            vectp2D1.push_back(vectp[triangleToBisect.Vertices2D[i]]);
-            triangleToBisect.vectp2D = vectp2D1;
+            //vectp2D1.push_back(vectp[triangleToBisect.Vertices2D[i]]);
+            //triangleToBisect.vectp2D = vectp2D1;
             break;
         };
     }
 
+    for (unsigned int i = 0; i<3; i++) {
+        triangleToBisect.vectp2D[i] = vectp[triangleToBisect.Vertices2D[i]];
+    }
 
     // lati effettivi del triangolo aggiornato
     for (unsigned int i=0; i < 3; i++) {
@@ -464,9 +467,13 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
         }
     }
 
+    for (unsigned int i = 0; i<3; i++) {
+        vectp2Dnew[i] = vectp[vertTriNuovo[i]];
+    }
+
     // creazione triangolo nuovo
     unsigned int idnewTri = vectt.size();
-    Cell2D newTri = Cell2D(idnewTri, vertTriNuovo, latiTriNuovo, vectp2D);
+    Cell2D newTri = Cell2D(idnewTri, vertTriNuovo, latiTriNuovo, vectp2Dnew);
     vectt.push_back(newTri);
 
 
@@ -519,7 +526,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
             if(!(vects[idLatoTagliatoVecchio].Vertices1D[0] == Triangolo.Vertices2D[i] || vects[idLatoTagliatoNuovo].Vertices1D[1] == Triangolo.Vertices2D[i]))
                 {
                 newopposite = Triangolo.Vertices2D[i];
-                vectpUlti.push_back(vectp[newopposite]);
+                //vectpUlti.push_back(vectp[newopposite]);
                 break;
                 }
         }
@@ -535,7 +542,6 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         for (unsigned int i = 0; i<3; i++) {
             if (vertUltimoTri[i] == vects[idLatoTagliatoVecchio].Vertices1D[0]) {
                 vertUltimoTri[i] = vects[idLatoTagliatoVecchio].Vertices1D[1];
-                vectpUlti.push_back(vectp[vertUltimoTri[i]]);  // CONTROLLAREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
                 break;
             }
         }
@@ -550,6 +556,10 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         }
 
         unsigned int sizeT = vectt.size();
+
+        for (unsigned int i = 0; i<3; i++) {
+            vectpUlti[i] = vectp[vertUltimoTri[i]];
+        }
 
         Cell2D UltimoTriangolo = Cell2D(sizeT, vertUltimoTri, latiUltimoTri, vectpUlti);
         vectt.push_back(UltimoTriangolo);
@@ -649,7 +659,6 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         unsigned int newIndexpointPropa = vectp.size();
         Project::Cell0D newVertexPropa = Cell0D(newIndexpointPropa, markerPPropa, midCoordPropa);
         vectp.push_back(newVertexPropa);
-        vectpPenu.push_back(newVertexPropa);  // CONTROLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
         unsigned int oppositePropa = 0;
         for(unsigned int i = 0; i < 3; i++)
@@ -657,7 +666,6 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
             if(!(vects[latoMax].Vertices1D[0] == Triangolo.Vertices2D[i] || vects[latoMax].Vertices1D[1] == Triangolo.Vertices2D[i]))
                 {
                 oppositePropa = Triangolo.Vertices2D[i];
-                vectpPenu.push_back(vectp[oppositePropa]); // CONTROLLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                 break;
                 }
         }
@@ -680,7 +688,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         vects.push_back(newSegmentPropa);
 
         // aggiorno end pto medio propa
-        vects[latoMax].Vertices1D[1] = newVertexPropa.Id0D; //GUARDATO FINO A QUI
+        vects[latoMax].Vertices1D[1] = newVertexPropa.Id0D;
 
 
 
@@ -688,7 +696,6 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         for (unsigned int i = 0;i<3;i++) {
             if (Triangolo.Vertices2D[i] != vects[idLatoTagliatoNuovo].Vertices1D[1] && Triangolo.Vertices2D[i] != vects[idLatoTagliatoVecchio].Vertices1D[0]) {
                 lontano = Triangolo.Vertices2D[i];
-                vectpPenu.push_back(vectp[lontano]);
             }
         }
 
@@ -747,9 +754,13 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
             }
         }
 
-        unsigned int sizePenultimo = vectt.size();
+        unsigned int idPenultimo = vectt.size();
 
-        Cell2D Penultimo = Cell2D(sizePenultimo, vertTriNuovoPropa, latiTriNuovoPropa, vectpPenu);
+        for (unsigned int i = 0; i<3; i++) {
+            vectpPenu[i] = vectp[vertTriNuovoPropa[i]];
+        }
+
+        Cell2D Penultimo = Cell2D(idPenultimo, vertTriNuovoPropa, latiTriNuovoPropa, vectpPenu);
         vectt.push_back(Penultimo);
 
         //aggiorno PARZIALMENTE matrice di adiac
@@ -773,6 +784,9 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
             }
         }
 
+        for (unsigned int i = 0; i<3; i++) {
+            Triangolo.vectp2D[i] = vectp[Triangolo.Vertices2D[i]];
+        }
 
         // collego i due punti medi
 
@@ -780,11 +794,11 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         array<unsigned int, 3> vertTriResiduoPropa = Penultimo.Vertices2D;
 
 
-        unsigned int sizeUnione = vects.size();
+        unsigned int idUnione = vects.size();
         unsigned int markerUnione = 0;
         vector<unsigned int> vettoreUnione = {vects[idLatoTagliatoVecchio].Vertices1D[1], newVertexPropa.Id0D};
 
-        Cell1D Unione = Cell1D(sizeUnione, markerUnione, vettoreUnione);
+        Cell1D Unione = Cell1D(idUnione, markerUnione, vettoreUnione);
         vects.push_back(Unione);
 
         if (vects[latoMax].Vertices1D[0] == vects[idLatoTagliatoVecchio].Vertices1D[0]) {
@@ -798,7 +812,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                 }
                 if (vertTriResiduoPropa[i] == vects[idLatoTagliatoNuovo].Vertices1D[1]) {
                     vertTriResiduoPropa[i] = vects[idLatoTagliatoNuovo].Vertices1D[0];
-                    vectpResi.push_back(vectp[vertTriNuovoPropa[i]]);
+                    //vectpResi.push_back(vectp[vertTriNuovoPropa[i]]);
                 }
                 // aggiorno lati
                 if (Penultimo.Edges[i] == idLatoTagliatoVecchio) {
@@ -813,9 +827,17 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
 
             }
 
-            unsigned int sizeResiduoT = vectt.size();
+            unsigned int idResiduoT = vectt.size();
 
-            Cell2D Residuo = Cell2D(sizeResiduoT, vertTriResiduoPropa, latiTriResiduoPropa, vectpResi);
+            for (unsigned int i = 0; i<3; i++) {
+                Penultimo.vectp2D[i] = vectp[Penultimo.Vertices2D[i]];
+            }
+
+            for (unsigned int i = 0; i<3; i++) {
+                vectpResi[i] = vectp[vertTriResiduoPropa[i]];
+            }
+
+            Cell2D Residuo = Cell2D(idResiduoT, vertTriResiduoPropa, latiTriResiduoPropa, vectpResi);
             vectt.push_back(Residuo);
 
             // aggiorno matrice adiacenza
@@ -853,6 +875,14 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
 
             unsigned int sizeResiduo = vectt.size();
 
+            for (unsigned int i = 0; i<3; i++) {
+                Penultimo.vectp2D[i] = vectp[Penultimo.Vertices2D[i]];
+            }
+
+            for (unsigned int i = 0; i<3; i++) {
+                vectpResi[i] = vectp[vertTriResiduoPropa[i]];
+            }
+
             Cell2D Residuo = Cell2D(sizeResiduo, vertTriResiduoPropa, latiTriResiduoPropa, vectpResi);
             vectt.push_back(Residuo);
 
@@ -870,8 +900,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         // in questo caso è ricorsiva
         if (markerMaxEdgePropa == 0) {
             Cell2D& AltroTriPropa = vectt[idAltroTriPropa];
-            //unsigned int recursionDepth1 = numberRecurs + 1;
-            Project::Propagazione(latoMax, newSegmentPropa.Id1D, AltroTriPropa, idAltroMaxEdgePropa, vectp, vects, vectt, Matr); //, recursionDepth1);
+            Project::Propagazione(latoMax, newSegmentPropa.Id1D, AltroTriPropa, idAltroMaxEdgePropa, vectp, vects, vectt, Matr);
         }
     } // fine else (lato lungo diverso dal precedente)
 } // fine Propagazione
