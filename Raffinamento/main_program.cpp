@@ -24,22 +24,22 @@ int main()
 
     unsigned int numbercell0D = 0;
     vector<Project::Cell0D> vectp;
-    Project::ImportCell0Ds(vectp, numbercell0D);
+    Project::ImportCell0Ds(vectp, numbercell0D, "./Dataset/Test1/Cell0Ds.csv");
 
     unsigned int numbercell1D = 0;
     vector<Project::Cell1D> vects;
-    vector<double> LengthEdges;
-    Project::ImportCell1Ds(vects, numbercell1D, LengthEdges, vectp);
+    //vector<double> LengthEdges;
+    Project::ImportCell1Ds(vects, numbercell1D, vectp, "./Dataset/Test1/Cell1Ds.csv");
 
     unsigned int numbercell2D = 0;
     std::vector<vector<unsigned int>> LenghtMax;
     vector<Project::Cell2D> vectt;
     vector<Project::Cell0D> vectp2D;
-    Project::ImportCell2Ds(vectt, numbercell2D, vectp, vectp2D);
+    Project::ImportCell2Ds(vectt, numbercell2D, vectp, vectp2D, "./Dataset/Test1/Cell2Ds.csv");
 
     //Project::MatrAdiac MatriceAdiacenza = Project::MatrAdiac(mesh.vectt, mesh.vects);
 
-    Project::TriangularMesh mesh = Project::TriangularMesh(numbercell0D, vectp, numbercell1D, vects, LengthEdges, numbercell2D, LenghtMax, vectt);
+    Project::TriangularMesh mesh = Project::TriangularMesh(numbercell0D, vectp, numbercell1D, vects, numbercell2D, LenghtMax, vectt);
     vector<vector<unsigned int>> Matr = MatrAdiac(vectt, vects);
     //Project::MatrAdiac MatriceAdiacenza = Project::MatrAdiac(vectt, vects);
 
