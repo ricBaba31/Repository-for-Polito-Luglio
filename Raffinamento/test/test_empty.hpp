@@ -178,7 +178,7 @@ TEST(TestMetodi, TestMaxEdge)
     vector<Project::Cell1D> vectsT = {edgT1, edgT2, edgT3};
 
     array<unsigned int, 3> verTri = {vertT1.Id0D, vertT2.Id0D, vertT3.Id0D};
-    array<unsigned int, 3> edgTri = {edgT1.Id1D, edgT2.Id1D, edgT2.Id1D};
+    array<unsigned int, 3> edgTri = {edgT1.Id1D, edgT2.Id1D, edgT3.Id1D};
     Cell2D triT = Cell2D(idtri, verTri, edgTri, vectpT);
 
     double len = triT.maxedge(vectsT, vectpT);
@@ -252,7 +252,7 @@ TEST(TestRefinment, TestBisectEPropagation)
     vector<Project::Cell0D> vectpT1 = {vertT1, vertT2, vertT5};
     vector<Project::Cell0D> vectpT2 = {vertT2, vertT3, vertT5};
     vector<Project::Cell0D> vectpT3 = {vertT3, vertT4, vertT5};
-    vector<Project::Cell0D> vectpT4 = {vertT1, vertT4, vertT5};
+    vector<Project::Cell0D> vectpT4 = {vertT4, vertT1, vertT5};
 
     vector<unsigned int> verEdg1 = {vertT1.Id0D, vertT2.Id0D}, verEdg2 = {vertT2.Id0D, vertT3.Id0D}, verEdg3 = {vertT3.Id0D, vertT4.Id0D}, verEdg4 = {vertT4.Id0D, vertT1.Id0D}, verEdg5 = {vertT1.Id0D, vertT5.Id0D}, verEdg6 = {vertT2.Id0D, vertT5.Id0D}, verEdg7 = {vertT3.Id0D, vertT5.Id0D}, verEdg8 = {vertT4.Id0D, vertT5.Id0D};
     Cell1D edgT1 = Cell1D(idEdgT1, markerEdgT1, verEdg1), edgT2 = Cell1D(idEdgT2, markerEdgT2, verEdg2), edgT3 = Cell1D(idEdgT3, markerEdgT3, verEdg3), edgT4 = Cell1D(idEdgT4, markerEdgT4, verEdg4), edgT5 = Cell1D(idEdgT5, markerEdgT5, verEdg5), edgT6 = Cell1D(idEdgT6, markerEdgT6, verEdg6), edgT7 = Cell1D(idEdgT7, markerEdgT7, verEdg7), edgT8 = Cell1D(idEdgT8, markerEdgT8, verEdg8);
