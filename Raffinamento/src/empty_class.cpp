@@ -373,7 +373,7 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
     if (vectp[vects[longest].Vertices1D[0]].marker0D == 0 || vectp[vects[longest].Vertices1D[1]].marker0D == 0) {
         markerP = 0;
     }
-    if (vectp[vects[longest].Vertices1D[0]].marker0D == 1 && vectp[vects[longest].Vertices1D[1]].marker0D == 2) {
+    else if (vectp[vects[longest].Vertices1D[0]].marker0D == 1 && vectp[vects[longest].Vertices1D[1]].marker0D == 2) {
         markerP = 5; // caso non presente nei dati importati ma necessario per il test
     }
     else if (vectp[vects[longest].Vertices1D[0]].marker0D == 5 || vectp[vects[longest].Vertices1D[0]].marker0D == 6 ||
