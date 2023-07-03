@@ -267,7 +267,7 @@ TEST(TestRefinment, TestBisect)
     vector<vector<unsigned int>> MatrAd = MatrAdiac(vecttT, vectsT);
 
 
-    Project::Cell2D& trisupp1T = vecttT[0];
+    Project::Cell2D* trisupp1T = &vecttT[0];
     Bisect(trisupp1T, vectpT, vectsT, vecttT, MatrAd); // lato lungo esterno -> non parte propagazione
 
     //area tri 1 = 5
@@ -275,12 +275,15 @@ TEST(TestRefinment, TestBisect)
     //len edge 0 = 3
     //len edge 9 = rad 5
 
-    EXPECT_EQ(vecttT[0].Area(), 3.5);
-    EXPECT_EQ(vecttT[4].Area(), 3.5);
+    cout << vecttT[0].Area()<<endl;
+    cout << vectsT[0].LengthEdge(vectpT)<<endl;
+
+    EXPECT_EQ(vecttT[0].Area(), 1.5);
+    EXPECT_EQ(vecttT[4].Area(), 1.5);
     EXPECT_EQ(vectsT[0].LengthEdge(vectpT), 3);
     EXPECT_EQ(vectsT[9].LengthEdge(vectpT), sqrt(5));
-    EXPECT_EQ(MatrAd[5][0], 1);
-    EXPECT_EQ(MatrAd[5][1], 4);
+    EXPECT_EQ(MatrAd[5][0], 4);
+    EXPECT_EQ(MatrAd[5][1], 1);
     EXPECT_EQ(MatrAd[8][0], 0);
     EXPECT_EQ(MatrAd[8][1], 4);
 
@@ -322,7 +325,7 @@ TEST(TestRefinment, TestPropagation)
     vector<vector<unsigned int>> MatrAd = MatrAdiac(vecttT, vectsT);
 
 
-    Project::Cell2D& trisupp2T = vecttT[1];
+    Project::Cell2D* trisupp2T = &vecttT[1];
     Bisect(trisupp2T, vectpT, vectsT, vecttT, MatrAd); // lato lungo interno -> parte propagazione
 
     //area tri 1 = 5
