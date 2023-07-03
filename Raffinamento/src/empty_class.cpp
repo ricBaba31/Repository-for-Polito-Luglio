@@ -5,12 +5,10 @@
 #include <algorithm>
 #include "cmath"
 #include "empty_class.hpp"
-#include "sorting.hpp"
 
 
 using namespace std;
 using namespace Eigen;
-using namespace Sorting;
 //using namespace Project;
 
 
@@ -348,7 +346,7 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
 
     unsigned int longest = triangleToBisect.maxedge(vects, vectp);
     vector<Project::Cell0D> vectp2Dnew;
-    vector<Project::Cell0D> vectp2Dupd;
+    //vector<Project::Cell0D> vectp2Dupd;
     //serve subito controllo: 1) marker lato lungo 2) lato lungo dell'eventuale altro triangolo
     unsigned int markerMaxEdge = vects[longest].marker1D;
     unsigned int idAltroMaxEdge = 0;
@@ -375,8 +373,16 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
     if (vectp[vects[longest].Vertices1D[0]].marker0D == 0 || vectp[vects[longest].Vertices1D[1]].marker0D == 0) {
         markerP = 0;
     }
-    else {
-    markerP = vectp[vects[longest].Vertices1D[0]].marker0D; // per come sono i dati di partenza non ci sono/possono
+    if (vectp[vects[longest].Vertices1D[0]].marker0D == 1 && vectp[vects[longest].Vertices1D[1]].marker0D == 2) {
+        markerP = 5; // caso non presente nei dati importati ma necessario per il test
+    }
+    else if (vectp[vects[longest].Vertices1D[0]].marker0D == 5 || vectp[vects[longest].Vertices1D[0]].marker0D == 6 ||
+             vectp[vects[longest].Vertices1D[0]].marker0D == 7 || vectp[vects[longest].Vertices1D[0]].marker0D == 8){
+    markerP = vectp[vects[longest].Vertices1D[0]].marker0D;
+    }
+    else if (vectp[vects[longest].Vertices1D[1]].marker0D == 5 || vectp[vects[longest].Vertices1D[1]].marker0D == 6 ||
+             vectp[vects[longest].Vertices1D[1]].marker0D == 7 || vectp[vects[longest].Vertices1D[1]].marker0D == 8){
+    markerP = vectp[vects[longest].Vertices1D[1]].marker0D; // per come sono i dati di partenza non ci sono/possono
                                                                       // essere ulteriori configurazioni
     }
     unsigned int newIndexpoint = vectp.size();
@@ -399,15 +405,15 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
 
     vector<unsigned int> MedianaVert = {opposite, newVertex.Id0D};
 
-    unsigned int idNewEdge = vects.size();
-    unsigned int idNewEdge2 = idNewEdge + 1;
+    unsigned int idMediana = vects.size();
+    unsigned int idNewEdge2 = idMediana + 1;
 
     unsigned int markerMediana = 0; // NON PUO' ESSERE ALTRIMENTI
 
 
 
     //Creo segm mediana
-    Cell1D Mediana = Cell1D(idNewEdge, markerMediana, MedianaVert);
+    Cell1D Mediana = Cell1D(idMediana, markerMediana, MedianaVert);
     vects.push_back(Mediana);
 
     vector<unsigned int> NewSegVert = {newVertex.Id0D, vects[longest].Vertices1D[1]};
@@ -426,7 +432,7 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
 
     //vertici effettivi del triangolo nuovo
     for (unsigned int i = 0;i<3;i++) {
-        if (vertTriNuovo[i] != opposite && vertTriNuovo[i] != vects[longest].Vertices1D[1]) {
+        if (vertTriNuovo[i] == vects[longest].Vertices1D[0]) {
             vertTriNuovo[i] = newVertex.Id0D;
             //vectp2D.push_back(vectp[vertTriNuovo[i]]);
             break;
@@ -437,15 +443,13 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
     for (unsigned int i = 0;i<3;i++) {
         if (triangleToBisect.Vertices2D[i] != opposite && triangleToBisect.Vertices2D[i] != vects[longest].Vertices1D[0]) {
             triangleToBisect.Vertices2D[i] = newVertex.Id0D;
+            triangleToBisect.vectp2D[i] = newVertex;
             //vectp2D1.push_back(vectp[triangleToBisect.Vertices2D[i]]);
             //triangleToBisect.vectp2D = vectp2D1;
             break;
         };
     }
 
-    for (unsigned int i = 0; i<3; i++) {
-        triangleToBisect.vectp2D[i] = vectp[triangleToBisect.Vertices2D[i]];
-    }
 
     // lati effettivi del triangolo aggiornato
     for (unsigned int i=0; i < 3; i++) {
@@ -468,7 +472,7 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
     }
 
     for (unsigned int i = 0; i<3; i++) {
-        vectp2Dnew[i] = vectp[vertTriNuovo[i]];
+        vectp2Dnew.push_back(vectp[vertTriNuovo[i]]);
     }
 
     // creazione triangolo nuovo
@@ -478,10 +482,22 @@ void Bisect(Project::Cell2D& triangleToBisect, vector<Project::Cell0D>& vectp, v
 
 
     // aggiorno matrice di adiacenza
+
     // aggiungo mediana
-    Matr.push_back({newTri.Id2D, triangleToBisect.Id2D});
+    vector<unsigned int> MatrMediana = {triangleToBisect.Id2D, newTri.Id2D};
+    Matr.push_back(MatrMediana);
+
     // aggiungo newSegment
-    Matr.push_back({newTri.Id2D, idAltroTri});
+    if (vects[longest].marker1D == 0){
+        vector<unsigned int> MatrNewSegment = {newTri.Id2D, idAltroTri};
+        Matr.push_back(MatrNewSegment);
+    }
+    else {
+        vector<unsigned int> MatrNewSegment = {newTri.Id2D};
+        Matr.push_back(MatrNewSegment);
+    }
+
+
     // aggiorno terzo lato
     for (unsigned int i=0; i<3; i++) {
         if(newTri.Edges[i] != Mediana.Id1D && newTri.Edges[i] != newSegment.Id1D){
