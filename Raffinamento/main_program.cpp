@@ -44,15 +44,13 @@ int main()
     //Project::MatrAdiac MatriceAdiacenza = Project::MatrAdiac(vectt, vects);
 
     for (int iter = 0; iter<20; iter++) {
-        Sorting::HeapSort(vectSupp, vectt); //, vectp);
+        Sorting::HeapSort(vectSupp, vectt);
         for (int i = 0; i < 20; i++) {
-            Project::Cell2D& trisupp = vectSupp[i];
-            Project::Bisect(trisupp, vectp, vects, vectt, Matr);   //, MatriceAdiacenza.Matr);
+            Project::Cell2D* trisupp = &vectt[vectSupp[i].Id2D];
+            Project::Bisect(trisupp, vectp, vects, vectt, Matr);
         }
     }
 
-
-//    empty.Show();
 
     return 0;
 }
