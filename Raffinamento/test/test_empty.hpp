@@ -346,7 +346,64 @@ TEST(TestRefine, TestPropagationEasy)
     EXPECT_EQ(MatrAd[5][1], 4);
     EXPECT_EQ(MatrAd[8][0], 1);
     EXPECT_EQ(MatrAd[8][1], 4);
-    
+
+
+
+}
+
+
+TEST(TestRefine, TestPropagationComplex)
+{
+    unsigned int idVerT1 = 0, idVerT2 = 1, idVerT3 = 2, idVerT4 = 3, idVerT5 = 4;
+    unsigned int idEdgT1 = 0, idEdgT2 = 1, idEdgT3 = 2, idEdgT4 = 3, idEdgT5 = 4, idEdgT6 = 5, idEdgT7 = 6, idEdgT8 = 7;
+    unsigned int idTriT1 = 0, idTriT2 = 1, idTriT3 = 2, idTriT4 = 3;
+    unsigned int markerVerT1 = 1, markerVerT2 = 2, markerVerT3 = 3, markerVerT4 = 4, markerVerT5 = 0;
+    unsigned int markerEdgT1 = 5, markerEdgT2 = 6, markerEdgT3 = 7, markerEdgT4 = 8, markerEdgT5 = 0, markerEdgT6 = 0, markerEdgT7 = 0, markerEdgT8 = 0;
+    Vector2d CoordT1 = {0, 0};
+    Vector2d CoordT2 = {6, 0};
+    Vector2d CoordT3 = {6, 4};
+    Vector2d CoordT4 = {0, 4};
+    Vector2d CoordT5 = {1, 1};
+
+    Cell0D vertT1 = Cell0D(idVerT1, markerVerT1, CoordT1), vertT2 = Cell0D(idVerT2, markerVerT2, CoordT2), vertT3 = Cell0D(idVerT3, markerVerT3, CoordT3), vertT4 = Cell0D(idVerT4, markerVerT4, CoordT4), vertT5 = Cell0D(idVerT5, markerVerT5, CoordT5);
+    vector<Project::Cell0D> vectpT = {vertT1, vertT2, vertT3, vertT4, vertT5};
+    vector<Project::Cell0D> vectpT1 = {vertT1, vertT2, vertT5};
+    vector<Project::Cell0D> vectpT2 = {vertT2, vertT3, vertT5};
+    vector<Project::Cell0D> vectpT3 = {vertT3, vertT4, vertT5};
+    vector<Project::Cell0D> vectpT4 = {vertT4, vertT1, vertT5};
+
+    vector<unsigned int> verEdg1 = {vertT1.Id0D, vertT2.Id0D}, verEdg2 = {vertT2.Id0D, vertT3.Id0D}, verEdg3 = {vertT3.Id0D, vertT4.Id0D}, verEdg4 = {vertT4.Id0D, vertT1.Id0D}, verEdg5 = {vertT1.Id0D, vertT5.Id0D}, verEdg6 = {vertT2.Id0D, vertT5.Id0D}, verEdg7 = {vertT3.Id0D, vertT5.Id0D}, verEdg8 = {vertT4.Id0D, vertT5.Id0D};
+    Cell1D edgT1 = Cell1D(idEdgT1, markerEdgT1, verEdg1), edgT2 = Cell1D(idEdgT2, markerEdgT2, verEdg2), edgT3 = Cell1D(idEdgT3, markerEdgT3, verEdg3), edgT4 = Cell1D(idEdgT4, markerEdgT4, verEdg4), edgT5 = Cell1D(idEdgT5, markerEdgT5, verEdg5), edgT6 = Cell1D(idEdgT6, markerEdgT6, verEdg6), edgT7 = Cell1D(idEdgT7, markerEdgT7, verEdg7), edgT8 = Cell1D(idEdgT8, markerEdgT8, verEdg8);
+    vector<Project::Cell1D> vectsT = {edgT1, edgT2, edgT3, edgT4, edgT5, edgT6, edgT7, edgT8};
+
+    array<unsigned int, 3> verTri1 = {vertT1.Id0D, vertT2.Id0D, vertT5.Id0D}, verTri2 = {vertT2.Id0D, vertT3.Id0D, vertT5.Id0D}, verTri3 = {vertT3.Id0D, vertT4.Id0D, vertT5.Id0D}, verTri4 = {vertT4.Id0D, vertT1.Id0D, vertT5.Id0D};
+    array<unsigned int, 3> edgTri1 = {edgT1.Id1D, edgT6.Id1D, edgT5.Id1D}, edgTri2 = {edgT2.Id1D, edgT7.Id1D, edgT6.Id1D}, edgTri3 = {edgT3.Id1D, edgT8.Id1D, edgT7.Id1D}, edgTri4 = {edgT4.Id1D, edgT5.Id1D, edgT8.Id1D};
+    Cell2D triT1 = Cell2D(idTriT1, verTri1, edgTri1, vectpT1), triT2 = Cell2D(idTriT2, verTri2, edgTri2, vectpT2), triT3 = Cell2D(idTriT3, verTri3, edgTri3, vectpT3), triT4 = Cell2D(idTriT4, verTri4, edgTri4, vectpT4);
+    vector<Project::Cell2D> vecttT = {triT1, triT2, triT3, triT4};
+
+    //vector<vector<unsigned int>> MatrAd = MatrAdiac(vecttT, vectsT).Matr;
+    vector<vector<unsigned int>> MatrAd = MatrAdiac(vecttT, vectsT);
+
+
+    Project::Cell2D* trisuppT = &vecttT[1];
+    Bisect(trisuppT, vectpT, vectsT, vecttT, MatrAd); // lato lungo interno -> parte propagazione
+
+    //area tri 1 = 5
+    //area tri 6 = 4.5
+    //len edge 0 = 3
+    //len edge 9 = rad 5
+
+    EXPECT_EQ(vecttT[1].Area(), 5);
+    EXPECT_EQ(vecttT[5].Area(), 2.25);
+    EXPECT_EQ(vectsT[6].LengthEdge(vectpT), sqrt(8.5));
+    EXPECT_EQ(vectsT[8].LengthEdge(vectpT), sqrt(12.5));
+    EXPECT_EQ(MatrAd[5][0], 0);
+    EXPECT_EQ(MatrAd[5][1], 4);
+    EXPECT_EQ(MatrAd[8][0], 1);
+    EXPECT_EQ(MatrAd[8][1], 4);
+    EXPECT_EQ(MatrAd[12][0], 5);
+    EXPECT_EQ(MatrAd[12][1], 6);
+
 
 
 }
