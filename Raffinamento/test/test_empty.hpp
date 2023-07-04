@@ -237,7 +237,7 @@ TEST(TestSorting, TestHeapSort)
 // ----------------------------------------------------------------------------------
 
 
-TEST(TestBis, TestBisect)
+TEST(TestRefine, TestBisect)
 {
     unsigned int idVerT1 = 0, idVerT2 = 1, idVerT3 = 2, idVerT4 = 3, idVerT5 = 4;
     unsigned int idEdgT1 = 0, idEdgT2 = 1, idEdgT3 = 2, idEdgT4 = 3, idEdgT5 = 4, idEdgT6 = 5, idEdgT7 = 6, idEdgT8 = 7;
@@ -297,7 +297,7 @@ TEST(TestBis, TestBisect)
 }
 
 
-TEST(TestProp, TestPropagation)
+TEST(TestRefine, TestPropagationEasy)
 {
     unsigned int idVerT1 = 0, idVerT2 = 1, idVerT3 = 2, idVerT4 = 3, idVerT5 = 4;
     unsigned int idEdgT1 = 0, idEdgT2 = 1, idEdgT3 = 2, idEdgT4 = 3, idEdgT5 = 4, idEdgT6 = 5, idEdgT7 = 6, idEdgT8 = 7;
