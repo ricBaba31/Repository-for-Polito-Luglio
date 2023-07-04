@@ -18,7 +18,10 @@ using namespace Sorting;
 using namespace Project;
 
 // constr x3
+
 // import x3
+
+// metodi x3
 
 // sorting
 
@@ -234,7 +237,7 @@ TEST(TestSorting, TestHeapSort)
 // ----------------------------------------------------------------------------------
 
 
-TEST(TestRefinment, TestBisect)
+TEST(TestBis, TestBisect)
 {
     unsigned int idVerT1 = 0, idVerT2 = 1, idVerT3 = 2, idVerT4 = 3, idVerT5 = 4;
     unsigned int idEdgT1 = 0, idEdgT2 = 1, idEdgT3 = 2, idEdgT4 = 3, idEdgT5 = 4, idEdgT6 = 5, idEdgT7 = 6, idEdgT8 = 7;
@@ -244,7 +247,7 @@ TEST(TestRefinment, TestBisect)
     Vector2d CoordT1 = {0, 0};
     Vector2d CoordT2 = {6, 0};
     Vector2d CoordT3 = {6, 4};
-    Vector2d CoordT4 = {0, 4};
+    Vector2d CoordT4 = {1, 3};
     Vector2d CoordT5 = {1, 1};
 
     Cell0D vertT1 = Cell0D(idVerT1, markerVerT1, CoordT1), vertT2 = Cell0D(idVerT2, markerVerT2, CoordT2), vertT3 = Cell0D(idVerT3, markerVerT3, CoordT3), vertT4 = Cell0D(idVerT4, markerVerT4, CoordT4), vertT5 = Cell0D(idVerT5, markerVerT5, CoordT5);
@@ -267,32 +270,34 @@ TEST(TestRefinment, TestBisect)
     vector<vector<unsigned int>> MatrAd = MatrAdiac(vecttT, vectsT);
 
 
-    Project::Cell2D* trisupp1T = &vecttT[0];
-    Bisect(trisupp1T, vectpT, vectsT, vecttT, MatrAd); // lato lungo esterno -> non parte propagazione
+    Project::Cell2D* trisuppT = &vecttT[0];
+    Bisect(trisuppT, vectpT, vectsT, vecttT, MatrAd); // lato lungo esterno -> non parte propagazione
 
     //area tri 1 = 5
     //area tri 6 = 4.5
     //len edge 0 = 3
     //len edge 9 = rad 5
 
-    cout << vecttT[0].Area()<<endl;
-    cout << vectsT[0].LengthEdge(vectpT)<<endl;
+    //cout << vecttT[0].Area()<<endl;
 
-    EXPECT_EQ(vecttT[0].Area(), 1.5);
-    EXPECT_EQ(vecttT[4].Area(), 1.5);
+
+
+
+    EXPECT_EQ(vecttT[0].Area(), 1.5); //0
+    EXPECT_EQ(vecttT[4].Area(), 1.5); //7.97095e+303 CAMBIA -> PROB GUARDA LOC MEMORIA
     EXPECT_EQ(vectsT[0].LengthEdge(vectpT), 3);
-    EXPECT_EQ(vectsT[9].LengthEdge(vectpT), sqrt(5));
+    EXPECT_EQ(vectsT[8].LengthEdge(vectpT), sqrt(5));
     EXPECT_EQ(MatrAd[5][0], 4);
     EXPECT_EQ(MatrAd[5][1], 1);
     EXPECT_EQ(MatrAd[8][0], 0);
     EXPECT_EQ(MatrAd[8][1], 4);
 
-
+    // PROBLEMI SOLO CON L'AREA
 
 }
 
 
-TEST(TestRefinment, TestPropagation)
+TEST(TestProp, TestPropagation)
 {
     unsigned int idVerT1 = 0, idVerT2 = 1, idVerT3 = 2, idVerT4 = 3, idVerT5 = 4;
     unsigned int idEdgT1 = 0, idEdgT2 = 1, idEdgT3 = 2, idEdgT4 = 3, idEdgT5 = 4, idEdgT6 = 5, idEdgT7 = 6, idEdgT8 = 7;
@@ -302,7 +307,7 @@ TEST(TestRefinment, TestPropagation)
     Vector2d CoordT1 = {0, 0};
     Vector2d CoordT2 = {6, 0};
     Vector2d CoordT3 = {6, 4};
-    Vector2d CoordT4 = {0, 4};
+    Vector2d CoordT4 = {1, 3};
     Vector2d CoordT5 = {1, 1};
 
     Cell0D vertT1 = Cell0D(idVerT1, markerVerT1, CoordT1), vertT2 = Cell0D(idVerT2, markerVerT2, CoordT2), vertT3 = Cell0D(idVerT3, markerVerT3, CoordT3), vertT4 = Cell0D(idVerT4, markerVerT4, CoordT4), vertT5 = Cell0D(idVerT5, markerVerT5, CoordT5);
@@ -325,8 +330,8 @@ TEST(TestRefinment, TestPropagation)
     vector<vector<unsigned int>> MatrAd = MatrAdiac(vecttT, vectsT);
 
 
-    Project::Cell2D* trisupp2T = &vecttT[1];
-    Bisect(trisupp2T, vectpT, vectsT, vecttT, MatrAd); // lato lungo interno -> parte propagazione
+    Project::Cell2D* trisuppT = &vecttT[1];
+    Bisect(trisuppT, vectpT, vectsT, vecttT, MatrAd); // lato lungo interno -> parte propagazione
 
     //area tri 1 = 5
     //area tri 6 = 4.5
@@ -334,14 +339,14 @@ TEST(TestRefinment, TestPropagation)
     //len edge 9 = rad 5
 
     EXPECT_EQ(vecttT[1].Area(), 5);
-    EXPECT_EQ(vecttT[5].Area(), 4.5);
+    EXPECT_EQ(vecttT[5].Area(), 2.5);
     EXPECT_EQ(vectsT[6].LengthEdge(vectpT), sqrt(8.5));
-    EXPECT_EQ(vectsT[9].LengthEdge(vectpT), sqrt(12.5));
+    EXPECT_EQ(vectsT[8].LengthEdge(vectpT), sqrt(12.5));
     EXPECT_EQ(MatrAd[5][0], 0);
     EXPECT_EQ(MatrAd[5][1], 4);
     EXPECT_EQ(MatrAd[8][0], 1);
     EXPECT_EQ(MatrAd[8][1], 4);
-
+    
 
 
 }
