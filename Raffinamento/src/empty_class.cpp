@@ -147,7 +147,7 @@ double Project::Cell2D::Area(){
 
 
 
-bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti, unsigned int& numbercell0D123, const string& file0)
+bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti, unsigned int& numbercell0D123, string file0)
 {
 
 ifstream file;
@@ -189,7 +189,7 @@ converter >>  id >> marker >> coord[0] >> coord[1];
 
 Project::Cell0D point = Project::Cell0D(id,marker,coord);
 vettorePunti.push_back(point);
-cout << point.Coord << endl;
+//cout << point.Coord << endl;
 
 //    if( marker != 0)
 //    {
@@ -206,7 +206,7 @@ cout << point.Coord << endl;
 
 
 
-bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, unsigned int& numbercell1D123, vector<Project::Cell0D>& vettorePunti, const string& file1)
+bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, unsigned int& numbercell1D123, vector<Project::Cell0D>& vettorePunti,  string file1)
 {
 
   ifstream file;
@@ -243,7 +243,7 @@ bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, unsigned int& numbercel
     converter >>  id >> marker >> vertices[0] >> vertices[1];
     Project::Cell1D segment = Project::Cell1D(id,marker,vertices);
     vettoreLati.push_back(segment);
-    cout << segment.LengthEdge(vettorePunti) << endl;
+    //cout << segment.LengthEdge(vettorePunti) << endl;
     //LengthEdges123.push_back(segment.LengthEdge(vettorePunti));
 
 
@@ -256,7 +256,7 @@ bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, unsigned int& numbercel
 
 
 
-bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli, unsigned int& numbercell2D123, vector<Project::Cell0D>& vettorePunti, vector<Project::Cell0D>& vectp2DF, const string& file2)
+bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli, unsigned int& numbercell2D123, vector<Project::Cell0D>& vettorePunti, vector<Project::Cell0D>& vectp2DF,  string file2)
 {
 
   ifstream file;
@@ -857,7 +857,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
 
             Cell2D Residuo = Cell2D(idResiduoT, vertTriResiduoPropa, latiTriResiduoPropa, vectpResi);
             vectt.push_back(Residuo);
-            Triangolo = &vectt[idTTBmemoPropa];
+            //Triangolo = &vectt[idTTBmemoPropa];
             PenultimoP = &vectt[idTTPenultimo];
 
             // aggiorno matrice adiacenza
