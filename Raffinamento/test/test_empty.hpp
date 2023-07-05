@@ -83,9 +83,9 @@ TEST(TestImport, TestCell0D)
     unsigned int numbercell0DT = 0;
     vector<Project::Cell0D> vectpT;
 
-    Vector2d coord3T = {0.0000000000000000e+00, 0.655};
+    Vector2d coord3T = {0.0000000000000000e+00, 1};
 
-    if(ImportCell0Ds(vectpT, numbercell0DT, "../Dataset/Test1/Cell0Ds.csv")){
+    if(ImportCell0Ds(vectpT, numbercell0DT, "C:/Users/utente/Desktop/PCS2023_Exercises/Projects/Raffinamento/Dataset/Test1/Cell0Ds.csv")){
         EXPECT_EQ(vectpT[0].marker0D, 1);
         EXPECT_EQ(vectpT[2].Id0D, 2);
         EXPECT_EQ(vectpT[3].Coord, coord3T);
@@ -102,12 +102,14 @@ TEST(TestImport, TestCell1D)
     vector<Project::Cell1D> vectsT;
     vector<Project::Cell0D> vectpT;
 
-    if(ImportCell1Ds(vectsT, numbercell1DT, vectpT, "../Dataset/Test1/Cell1Ds.csv")){
-        EXPECT_EQ(vectsT[0].marker1D, 0);
-        EXPECT_EQ(vectsT[2].Id1D, 2);
-        EXPECT_EQ(vectsT[3].Vertices1D[0], 23);
-        EXPECT_EQ(vectsT[7].Vertices1D[1], 50);
+    if(ImportCell1Ds(vectsT, numbercell1DT, vectpT, "C:/Users/utente/Desktop/PCS2023_Exercises/Projects/Raffinamento/Dataset/Test1/Cell1Ds.csv")) {
+
+    EXPECT_EQ(vectsT[0].marker1D, 0);
+    EXPECT_EQ(vectsT[2].Id1D, 2);
+    EXPECT_EQ(vectsT[3].Vertices1D[0], 23);
+    EXPECT_EQ(vectsT[7].Vertices1D[1], 50);
     }
+
 
 }
 
@@ -120,7 +122,7 @@ TEST(TestImport, TestCell2D)
     unsigned int numbercell2DT = 0;
     vector<Project::Cell2D> vecttT;
 
-    if(ImportCell2Ds(vecttT, numbercell2DT, vectpT, vectpT2D, "../Dataset/Test1/Cell2Ds.csv")){
+    if(ImportCell2Ds(vecttT, numbercell2DT, vectpT, vectpT2D, "C:/Users/utente/Desktop/PCS2023_Exercises/Projects/Raffinamento/Dataset/Test1/Cell2Ds.csv")){
         EXPECT_EQ(vecttT[0].Id2D, 41);
         EXPECT_EQ(vecttT[1].Vertices2D[0] , 23);
         EXPECT_EQ(vecttT[2].Vertices2D[1], 51);
