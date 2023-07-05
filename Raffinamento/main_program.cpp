@@ -43,7 +43,7 @@ int main()
     vector<vector<unsigned int>> Matr = MatrAdiac(vectt, vects);
     //Project::MatrAdiac MatriceAdiacenza = Project::MatrAdiac(vectt, vects);
 
-    for (int iter = 0; iter<4; iter++) {
+    for (int iter = 0; iter < 4; iter++) {
         Sorting::HeapSort(vectSupp, vectt);
         for (int i = 0; i < 2; i++) {
             Project::Cell2D* trisupp = &vectt[vectSupp[i].Id2D];
