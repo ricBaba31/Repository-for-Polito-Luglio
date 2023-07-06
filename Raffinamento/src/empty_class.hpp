@@ -79,9 +79,7 @@ namespace Project {
 
     };
 
-    //extern vector<Project::Cell0D> vectp;
-    //extern vector<Project::Cell1D> vects;
-    //extern vector<Project::Cell2D> vectt;
+
 
     //class MatrAdiac{
     //public:
