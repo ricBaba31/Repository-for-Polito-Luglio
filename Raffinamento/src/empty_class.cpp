@@ -56,17 +56,17 @@ Project::Cell2D::Cell2D(unsigned int& id,array<unsigned int, 3>& Vertices, array
 
 
 
-Project::TriangularMesh::TriangularMesh(unsigned int& numbercell0D12, vector<Project::Cell0D>& vectp12, unsigned int& numbercell1D12, vector<Project::Cell1D>& vects12, unsigned int& numbercell2D12, std::vector<vector<unsigned int>>& LenghtMax12, vector<Project::Cell2D>& vectt12){
+Project::TriangularMesh::TriangularMesh(vector<Project::Cell0D>& vectp12, vector<Project::Cell1D>& vects12, vector<Project::Cell2D>& vectt12){
 
-    numbercell0D = numbercell0D12;
-    vectp1 = vectp12;
+    //unsigned int numbercell0D = vectp12.size(); // PROBABILMENTE IN REALTA' NON SERVONO ------------------------------------------------------
+    vectpMesh = vectp12;
 
-    numbercell1D = numbercell1D12;
-    vects1 = vects12;
+    //unsigned int numbercell1D = vects12.size();
+    vectsMesh = vects12;
 
-    numbercell2D = numbercell2D12;
-    LenghtMax = LenghtMax12;
-    vectt1 = vectt12;
+    //unsigned int numbercell2D = vectt12.size();
+    //LenghtMax = LenghtMax12;
+    vecttMesh = vectt12;
 };
 
 
@@ -147,7 +147,7 @@ double Project::Cell2D::Area(){
 
 
 
-bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti, unsigned int& numbercell0D123, string file0)
+bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti, string file0)
 {
 
 ifstream file;
@@ -166,7 +166,7 @@ file.close();
 
 listLines.pop_front();
 
-numbercell0D123 = listLines.size();
+unsigned int numbercell0D123 = listLines.size();
 
 if (numbercell0D123 == 0)
 {
@@ -206,7 +206,7 @@ vettorePunti.push_back(point);
 
 
 
-bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, unsigned int& numbercell1D123, vector<Project::Cell0D>& vettorePunti,  string file1)
+bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, string file1)
 {
 
   ifstream file;
@@ -222,7 +222,7 @@ bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, unsigned int& numbercel
 
   listLines.pop_front();
 
-  numbercell1D123 = listLines.size();
+  unsigned int numbercell1D123 = listLines.size();
 
   if (numbercell1D123 == 0)
   {
@@ -256,7 +256,7 @@ bool ImportCell1Ds(vector<Project::Cell1D>& vettoreLati, unsigned int& numbercel
 
 
 
-bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli, unsigned int& numbercell2D123, vector<Project::Cell0D>& vettorePunti, vector<Project::Cell0D>& vectp2DF,  string file2)
+bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli, vector<Project::Cell0D>& vettorePunti, string file2)
 {
 
   ifstream file;
@@ -273,7 +273,7 @@ bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli, unsigned int& numb
   listLines.pop_front();
 
 
-  numbercell2D123 = listLines.size();
+  unsigned int numbercell2D123 = listLines.size();
 
   if (numbercell2D123 == 0)
   {
@@ -299,7 +299,7 @@ bool ImportCell2Ds(vector<Project::Cell2D>& vettoreTriangoli, unsigned int& numb
       converter >> edges[i];
 
 
-    vectp2DF = {vettorePunti[vertices[0]], vettorePunti[vertices[1]], vettorePunti[vertices[2]]};
+    vector<Project::Cell0D> vectp2DF = {vettorePunti[vertices[0]], vettorePunti[vertices[1]], vettorePunti[vertices[2]]};
     Project::Cell2D triangle = Project::Cell2D(id,vertices,edges, vectp2DF);
     vettoreTriangoli.push_back(triangle);
 
@@ -601,10 +601,21 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
             }
 
         }
-        for (unsigned int i=0; i<2; i++) {
-            if (Matr[idLatoTagliatoNuovo][i] == Triangolo->Id2D) {
+        //for (unsigned int i=0; i<2; i++) {
+        //    if (Matr[idLatoTagliatoNuovo][i] == Triangolo->Id2D) {
+        //        Matr[idLatoTagliatoNuovo][i] = UltimoTriangolo.Id2D;
+        //    }
+        //}
+
+        if(vects[idLatoTagliatoNuovo].marker1D == 0){
+           for (unsigned int i = 0; i<2; i++) {
+                if (Matr[idLatoTagliatoNuovo][i] == Triangolo->Id2D) {
                 Matr[idLatoTagliatoNuovo][i] = UltimoTriangolo.Id2D;
-            }
+                }
+           }
+        }
+        else{
+            Matr[idLatoTagliatoNuovo][0] = UltimoTriangolo.Id2D;
         }
 
 
@@ -617,18 +628,24 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
         // va fatto un if che mette l'end di latoMax = end latotagliatonuovo (caso 1)
         //                            origin latoMax = origin latotagliatovecchio (caso 2)
 
-        for (unsigned int i = 0; i <2 ; i++) {
-            if (vects[latoMax].Vertices1D[i] == vects[idLatoTagliatoVecchio].Vertices1D[0] && 1==1){
-                unsigned int supporto = vects[latoMax].Vertices1D[i];
-                vects[latoMax].Vertices1D[i] = vects[latoMax].Vertices1D[1-i];
-                vects[latoMax].Vertices1D[1-i] = supporto;
+        //for (unsigned int i = 0; i <2 ; i++) {
+        //    if (vects[latoMax].Vertices1D[i] == vects[idLatoTagliatoVecchio].Vertices1D[0] && i==1){
+        //        unsigned int supporto = vects[latoMax].Vertices1D[i];
+        //        vects[latoMax].Vertices1D[i] = vects[latoMax].Vertices1D[1-i];
+        //        vects[latoMax].Vertices1D[1-i] = supporto;
 
-            }
-            else if (vects[latoMax].Vertices1D[i] == vects[idLatoTagliatoVecchio].Vertices1D[1] && 1==0) {
-                unsigned int supporto = vects[latoMax].Vertices1D[i];
-                vects[latoMax].Vertices1D[i] = vects[latoMax].Vertices1D[i+1];
-                vects[latoMax].Vertices1D[i+1] = supporto;
-            }
+        //    }
+        //    else if (vects[latoMax].Vertices1D[i] == vects[idLatoTagliatoVecchio].Vertices1D[1] && 1==0) {
+        //        unsigned int supporto = vects[latoMax].Vertices1D[i];
+        //        vects[latoMax].Vertices1D[i] = vects[latoMax].Vertices1D[i+1];
+        //        vects[latoMax].Vertices1D[i+1] = supporto;
+        //    }
+        //}
+
+        if (vects[latoMax].Vertices1D[1] == vects[idLatoTagliatoVecchio].Vertices1D[0] || vects[latoMax].Vertices1D[0] == vects[idLatoTagliatoNuovo].Vertices1D[1])    {
+            unsigned int supporto = vects[latoMax].Vertices1D[0];
+            vects[latoMax].Vertices1D[0] = vects[latoMax].Vertices1D[1];
+            vects[latoMax].Vertices1D[1] = supporto;
         }
 
 
@@ -729,7 +746,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
             }
 
         }
-        else if (vects[latoMax].Vertices1D[1] == vects[idLatoTagliatoNuovo].Vertices1D[1]) {
+        else { // if (vects[latoMax].Vertices1D[1] == vects[idLatoTagliatoNuovo].Vertices1D[1]) {
             for (unsigned int i=0; i < 3; i++) {
                 if (Triangolo->Edges[i] == idLatoTagliatoVecchio) {
                     Triangolo->Edges[i] = MedianaPropa.Id1D;
@@ -745,7 +762,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                 }
             }
         }
-        else if (vects[latoMax].Vertices1D[1] == vects[idLatoTagliatoNuovo].Vertices1D[1]) {
+        else { // if (vects[latoMax].Vertices1D[1] == vects[idLatoTagliatoNuovo].Vertices1D[1]) {
             for (unsigned int i=0; i < 3; i++) {
                 if (latiTriNuovoPropa[i] == latoMax){
                     latiTriNuovoPropa[i] = newSegmentPropa.Id1D;
@@ -792,9 +809,9 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                 }
             }
         }
-        else if (vects[latoMax].Vertices1D[1] == vects[idLatoTagliatoNuovo].Vertices1D[1]) {
-            vector<unsigned int> SuppLatoTagliatoNuovo = {Triangolo->Id2D, PenultimoP->Id2D};
-            Matr.push_back(SuppLatoTagliatoNuovo);
+        else { // if (vects[latoMax].Vertices1D[1] == vects[idLatoTagliatoNuovo].Vertices1D[1]) {
+            vector<unsigned int> SuppMediana = {Triangolo->Id2D, PenultimoP->Id2D};
+            Matr.push_back(SuppMediana);
             for (unsigned int i = 0; i<2; i++) {
                 if (Matr[idLatoTagliatoVecchio][i] == Triangolo->Id2D) {
                     Matr[idLatoTagliatoVecchio][i] = PenultimoP->Id2D;
@@ -803,9 +820,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
             }
         }
 
-        for (unsigned int i = 0; i<3; i++) {
-            Triangolo->vectp2D[i] = vectp[Triangolo->Vertices2D[i]];
-        }
+
 
         // collego i due punti medi
 
@@ -828,6 +843,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                     PenultimoP->Vertices2D[i] = vects[idLatoTagliatoVecchio].Vertices1D[1];
                     PenultimoP->vectp2D[i] = vectp[PenultimoP->Vertices2D[i]]; //AGGIUNTO
                 }
+                // vert effettivi residuo
                 if (vertTriResiduoPropa[i] == vects[idLatoTagliatoNuovo].Vertices1D[1]) {
                     vertTriResiduoPropa[i] = vects[idLatoTagliatoNuovo].Vertices1D[0];
                     vectpResi[i] =vectp[vertTriResiduoPropa[i]]; //AGGIUNTO
@@ -839,6 +855,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                 if (PenultimoP->Edges[i] == latoMax) {
                     PenultimoP->Edges[i] = Unione.Id1D;
                 }
+                // lati effettivi residuo
                 if (latiTriResiduoPropa[i] == MedianaPropa.Id1D) {
                     latiTriResiduoPropa[i] = Unione.Id1D;
                 }
@@ -865,14 +882,14 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
             Matr.push_back(SuppUnione);
             for (unsigned int i = 0; i<2; i++) {
 
-                if (Matr[idLatoTagliatoVecchio][i] == PenultimoP->Id2D) {
+                if (Matr[idLatoTagliatoVecchio][i] == Triangolo->Id2D) {
                     Matr[idLatoTagliatoVecchio][i] = Residuo.Id2D;
                 }
             }
 
             if(markerLatoMax == 0){
                 for (unsigned int i = 0; i<2; i++) {
-                    if (Matr[latoMax][i] == PenultimoP->Id2D) {
+                    if (Matr[latoMax][i] == Triangolo->Id2D) {
                     Matr[latoMax][i] = Residuo.Id2D;
                     }
                 }
@@ -881,12 +898,14 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                 Matr[latoMax][0] = Residuo.Id2D;
             }
         }
-        else if (vects[latoMax].Vertices1D[1] == vects[idLatoTagliatoNuovo].Vertices1D[1]) {
+        else { // if (vects[latoMax].Vertices1D[1] == vects[idLatoTagliatoNuovo].Vertices1D[1]) {
             for (unsigned int i = 0; i<3; i++) {
+                // aggiorno vert penultimo
                 if (PenultimoP->Vertices2D[i] == newSegmentPropa.Vertices1D[1]) {
-                    PenultimoP->Vertices2D[i] = vects[idLatoTagliatoVecchio].Vertices1D[1];
+                    PenultimoP->Vertices2D[i] = newSegmentPropa.Vertices1D[0];
                     PenultimoP->vectp2D[i] = vectp[PenultimoP->Vertices2D[i]]; //AGGIUNTO
                 }
+                // vert effettivi res
                 if (vertTriResiduoPropa[i] == vects[idLatoTagliatoVecchio].Vertices1D[0]) {
                     vertTriResiduoPropa[i] = vects[idLatoTagliatoNuovo].Vertices1D[0];
                     vectpResi[i] =vectp[vertTriResiduoPropa[i]]; //AGGIUNTO
@@ -895,6 +914,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                 if (PenultimoP->Edges[i] == newSegmentPropa.Id1D) {
                     PenultimoP->Edges[i] = Unione.Id1D;
                 }
+                // lati effettivi residuo
                 if (latiTriResiduoPropa[i] == MedianaPropa.Id1D) {
                     latiTriResiduoPropa[i] = Unione.Id1D;
                 }
@@ -903,7 +923,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                 }
             }
 
-            unsigned int sizeResiduo = vectt.size();
+            unsigned int idResiduo = vectt.size();
 
             //for (unsigned int i = 0; i<3; i++) {
             //    Penultimo.vectp2D[i] = vectp[Penultimo.Vertices2D[i]]; // CONTROLLAAAAAAAAAAAAAAA E AGGIORNAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -913,13 +933,13 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
             //    vectpResi[i] = vectp[vertTriResiduoPropa[i]];
             //}
 
-            Cell2D Residuo = Cell2D(sizeResiduo, vertTriResiduoPropa, latiTriResiduoPropa, vectpResi);
+            Cell2D Residuo = Cell2D(idResiduo, vertTriResiduoPropa, latiTriResiduoPropa, vectpResi);
             vectt.push_back(Residuo);
             Triangolo = &vectt[idTTBmemoPropa];
             PenultimoP = &vectt[idTTPenultimo];
 
             // aggiorno matrice adiacenza
-            vector<unsigned int> SuppMedianaPropa = {PenultimoP->Id2D, Triangolo->Id2D}; //CAMBIATO RICONTROLLARE, RISCHIO ERRORE
+
             vector<unsigned int> SuppNewSegmentPropa;
             if(markerLatoMax == 0){
                 SuppNewSegmentPropa = {Residuo.Id2D, idAltroTriPropa};
@@ -928,7 +948,7 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
                 SuppNewSegmentPropa = {Residuo.Id2D};
             }
             vector<unsigned int> SuppUnione = {PenultimoP->Id2D, Residuo.Id2D};
-            Matr.push_back(SuppMedianaPropa);
+
             Matr.push_back(SuppNewSegmentPropa);
             Matr.push_back(SuppUnione);
             for (unsigned int i = 0; i<2; i++) {
