@@ -101,6 +101,9 @@ namespace Project {
     void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D* Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr); //, unsigned int& numberRecurs);
     //void PropagazioneRicorsiva(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr, unsigned int& numberRecurs);
 
+    bool ExportVertices(vector<Project::Cell0D>& vectp);
+    bool ExportEdges(vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects);
+    bool ExportTriangles(vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt);
 
     // tolleranze
     constexpr double max_tol(const double& x, const double& y)
