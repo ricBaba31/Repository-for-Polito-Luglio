@@ -51,6 +51,9 @@ int main()
         }
     }
 
+    Project::ExportVertices(mesh.vectpMesh);
+    Project::ExportEdges(mesh.vectpMesh, mesh.vectsMesh);
+    Project::ExportTriangles(mesh.vectpMesh, mesh.vectsMesh, mesh.vecttMesh);
 
     return 0;
 }
