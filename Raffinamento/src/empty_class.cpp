@@ -970,6 +970,90 @@ void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagli
 //void PropagazioneRicorsiva(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr, unsigned int& numberRecurs){
 //    Propagazione(idLatoTagliatoVecchio, idLatoTagliatoNuovo, Triangolo, latoMax, vectp, vects, vectt, Matr, numberRecurs);
 
+bool ExportVertices(vector<Project::Cell0D>& vectp){
+         ofstream file;
+         string outputFile = "C:/Users/Aliprandi/Desktop/PCS2023_Exercises/Projects/Raffinamento/Dataset/Test1/Cell0DsOutput.csv";
+         file.open(outputFile);
+
+         if(file.fail())
+         {
+           return false;
+         }
+
+         file<<"Id marker X Y"<<endl;
+
+         for(unsigned int i = 0; i < vectp.size();i++)
+         {
+           file<<vectp[i].Id0D<<" "<<vectp[i].marker0D<<" "<<vectp[i].Coord[0]<<" "<<vectp[i].Coord[1]<<endl;
+         }
+
+         file.close();
+         return true;
+
+}
+bool ExportEdges(vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects){
+
+        ofstream file;
+        string outputFile = "C:/Users/Aliprandi/Desktop/PCS2023_Exercises/Projects/Raffinamento/Dataset/Test1/Cell1DsOutput.csv";
+        file.open(outputFile);
+
+        if(file.fail())
+        {
+          return false;
+        }
+
+        file<<"Id marker V1 V2"<<endl;
+
+        for(unsigned int i = 0; i < vects.size(); i++)
+        {
+            file<<vects[i].Id1D<<' ';
+            file<<vects[i].marker1D<<' ';
+
+            for(unsigned int j = 0; j < 2; j++){
+            file<<vectp[vects[i].Vertices1D[j]].Id0D<<' ';
+            }
+
+        file<<endl;
+        }
+
+        file.close();
+
+        return true;
+
+}
+
+bool ExportTriangles(vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt){
+
+        ofstream file;
+        string outputFile = "C:/Users/Aliprandi/Desktop/PCS2023_Exercises/Projects/Raffinamento/Dataset/Test1/Cell2DsOutput.csv";
+        file.open(outputFile);
+
+        if(file.fail())
+        {
+            return false;
+        }
+
+        file<<"Id V1 V2 V3 E1 E2 E3"<<endl;
+
+        for(unsigned int i = 0; i < vectt.size(); i++)
+        {
+            file<<vectt[i].Id2D<<' ';
+
+            for(unsigned int j = 0; j < 3; j++){
+            file<<vectp[vectt[i].Vertices2D[j]].Id0D<<' ';
+            }
+
+            for(unsigned int j = 0; j < 3; j++){
+            file<<vects[vectt[i].Vertices2D[j]].Id1D<<' ';
+            }
+
+            file<<endl;
+        }
+
+  file.close();
+  return true;
+}
+
 }
 
 
