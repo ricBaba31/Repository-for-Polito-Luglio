@@ -1,14 +1,3 @@
-//{
-// class Empty
-//  {
-//    public:
-//      void Show() const { std::cout<< "Hello world;"<< std::endl; }
-//  };
-//}
-//
-//#endif // __EMPTY_H
-
-
 #ifndef __EMPTY_H
 #define __EMPTY_H
 
@@ -24,7 +13,7 @@ using namespace Eigen;
 
 namespace Project {
 
-
+    // classi
     class Cell0D {
 
 
@@ -54,22 +43,8 @@ namespace Project {
             vector<Project::Cell0D> vectp2D;
             Cell2D(unsigned int& id, array<unsigned int, 3>& Edges, vector<Project::Cell0D>& vectp2D);
             unsigned int maxedge(vector<Project::Cell1D>& vects, vector<Project::Cell0D>& vectp);
-            //double AreaProvv(vector<Project::Cell0D>& vectp);
             double Area(); //vector<Project::Cell0D>& vectp);
         };
-
-
-
-    //extern vector<Project::Cell0D> vectp;
-    //extern vector<Project::Cell1D> vects;
-    //extern vector<Project::Cell2D> vectt;
-
-    //class MatrAdiac{
-    //public:
-    //    vector<vector<unsigned int>> Matr;
-    //    MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects);
-    //};
-
 
 
     bool ImportCell0Ds(vector<Project::Cell0D>& vettorePunti, string path);
@@ -79,9 +54,8 @@ namespace Project {
     vector<vector<unsigned int>> MatrAdiac(vector<Project::Cell2D>& vectt, vector<Project::Cell1D>& vects);
 
     void Bisect(Project::Cell2D* triangleToBisect, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr);
-    void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D* Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr); //, unsigned int& numberRecurs);
-    //void PropagazioneRicorsiva(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D& Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr, unsigned int& numberRecurs);
-
+    void Propagazione(unsigned int& idLatoTagliatoVecchio, unsigned int& idLatoTagliatoNuovo, Cell2D* Triangolo, unsigned int& latoMax, vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt, vector<vector<unsigned int>>& Matr); 
+   
     bool ExportVertices(vector<Project::Cell0D>& vectp);
     bool ExportEdges(vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects);
 
