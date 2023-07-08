@@ -50,36 +50,19 @@ namespace Project {
     class Cell2D{
         public:
             unsigned int Id2D;
-            array<unsigned int, 3> Vertices2D;
             array<unsigned int, 3> Edges;
             vector<Project::Cell0D> vectp2D;
-            Cell2D(unsigned int& id, array<unsigned int, 3>& Vertices, array<unsigned int, 3>& Edges, vector<Project::Cell0D>& vectp2D);
+            Cell2D(unsigned int& id, array<unsigned int, 3>& Edges, vector<Project::Cell0D>& vectp2D);
             unsigned int maxedge(vector<Project::Cell1D>& vects, vector<Project::Cell0D>& vectp);
             //double AreaProvv(vector<Project::Cell0D>& vectp);
             double Area(); //vector<Project::Cell0D>& vectp);
         };
 
-    class TriangularMesh{
-    public:
-        unsigned int numbercell0D;
-        vector<Project::Cell0D> vectpMesh;
 
 
-
-        unsigned int numbercell1D;
-        vector<Project::Cell1D> vectsMesh;
-        //vector<double> LengthEdges;
-
-
-        unsigned int numbercell2D;
-        //std::vector<vector<unsigned int>> LenghtMax;  NON HO CAPITO A CHE SERVE ---------------------------------------------------
-        vector<Project::Cell2D> vecttMesh;
-
-        TriangularMesh(vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt);
-
-    };
-
-
+    //extern vector<Project::Cell0D> vectp;
+    //extern vector<Project::Cell1D> vects;
+    //extern vector<Project::Cell2D> vectt;
 
     //class MatrAdiac{
     //public:
@@ -101,7 +84,8 @@ namespace Project {
 
     bool ExportVertices(vector<Project::Cell0D>& vectp);
     bool ExportEdges(vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects);
-    bool ExportTriangles(vector<Project::Cell0D>& vectp, vector<Project::Cell1D>& vects, vector<Project::Cell2D>& vectt);
+
+
 
     // tolleranze
     constexpr double max_tol(const double& x, const double& y)
