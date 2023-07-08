@@ -38,7 +38,7 @@ void MakeHeap(vector<T>& vecttSuppS, unsigned int n, unsigned int i) {
         if (max != i)
         {
             swap(vecttSuppS[i], vecttSuppS[max]);
-            MakeHeap(vecttSuppS, n, max); //, vectpS);
+            MakeHeap(vecttSuppS, n, max); 
         }
     }
 
@@ -53,12 +53,12 @@ void HeapSort(vector<T>& vecttSuppS, vector<T>& vecttS){
 
     for (int i = vecttSuppS.size() / 2 - 1; i >= 0; i--)
     {
-        MakeHeap(vecttSuppS, vecttSuppS.size(), i); //, vectpS);
+        MakeHeap(vecttSuppS, vecttSuppS.size(), i); 
     }
     for (int i = vecttSuppS.size() - 1; i >= 0; i--)
     {
         swap(vecttSuppS[0], vecttSuppS[i]);
-        MakeHeap(vecttSuppS, i, 0); //, vectpS);
+        MakeHeap(vecttSuppS, i, 0); 
     }
 }
 
