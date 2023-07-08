@@ -17,7 +17,7 @@ namespace Sorting
 {
 
 template <typename T>
-void MakeHeap(vector<T>& vecttSuppS, unsigned int n, unsigned int i) { //, vector<T>& vectpS){
+void MakeHeap(vector<T>& vecttSuppS, unsigned int n, unsigned int i) { 
 
 
 
@@ -44,7 +44,7 @@ void MakeHeap(vector<T>& vecttSuppS, unsigned int n, unsigned int i) { //, vecto
 
 
 template<typename T>
-void HeapSort(vector<T>& vecttSuppS, vector<T>& vecttS){  //, vector<T>& vectpS){
+void HeapSort(vector<T>& vecttSuppS, vector<T>& vecttS){  
 
     vecttSuppS.clear();
     for (unsigned int k = 0; k < vecttS.size(); k++){
