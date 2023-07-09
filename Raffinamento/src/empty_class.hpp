@@ -73,7 +73,7 @@ namespace Project {
 
     inline bool operator<(Cell2D& t1,  Cell2D& t2) //, vector<Project::Cell0D>& vectp)
     {
-      return t1.Area() < t2.Area() + tol2D * max(t1.Area(), t2.Area());
+      return t1.Area() < t2.Area() - tol2D * max(t1.Area(), t2.Area());
     }
 
     inline bool operator>=(Cell2D& t1,Cell2D& t2)
